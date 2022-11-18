@@ -9,7 +9,7 @@ class Main(commands.Cog):
     async def on_message(self, message):
         if self.bot.user.mention == message.content or f'<@!{self.bot.user.id}>' == message.content:
             em = discord.Embed(
-                description=f'Hello! My here prefix is `?`',
+                description=f'Hello! My prefix is `?`',
                 color=discord.Color.random(),
             )
             await message.reply(embed=em)
