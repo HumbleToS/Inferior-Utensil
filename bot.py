@@ -23,7 +23,7 @@ sh.setLevel(logging.DEBUG)
 sh.setFormatter(log_fmt)
 
 max_bytes = 4 * 1024 * 1024 # 4 MB
-rfh = logging.handlers.RotatingFileHandler("logs/snipebot.log", maxBytes=max_bytes, backupCount=10)
+rfh = logging.handlers.RotatingFileHandler("logs/inferiorutensil.log", maxBytes=max_bytes, backupCount=10)
 rfh.setLevel(logging.DEBUG)
 rfh.setFormatter(log_fmt)
 
