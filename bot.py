@@ -3,6 +3,7 @@ import discord
 import aiohttp
 import asyncio
 import logging
+import logging.handlers
 import json
 import os
 import sys
