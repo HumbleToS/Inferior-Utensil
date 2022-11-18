@@ -6,6 +6,9 @@ __pycache__/
 # Bot Config
 config.json
 
+# Logging directory
+logs/
+
 # pyenv
 .python-version
 
