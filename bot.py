@@ -1,6 +1,7 @@
 from discord.ext import commands
 import discord
 import aiohttp
+import asyncio
 import logging
 import json
 import os
@@ -59,3 +60,10 @@ class InferiorUtensil(commands.Bot):
 
     async def start(self) -> None:
         await super().start(config.get("token"), reconnect=True)
+
+# Start and run the bot
+async def main():
+    bot = InferiorUtensil()
+    await bot.start()
+
+asyncio.run(main())
