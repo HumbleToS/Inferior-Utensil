@@ -5,6 +5,7 @@ import asyncio
 import logging
 import json
 import os
+import sys
 import pathlib
 
 bot_description = "I am an Inferior Utensil <3"
@@ -12,7 +13,30 @@ bot_description = "I am an Inferior Utensil <3"
 config_path = os.path.dirname(os.path.abspath(__file__))
 config = json.load(open(f"{config_path}/config.json"))
 
-log = logging.getLogger(__name__)
+log_fmt = logging.Formatter(
+    fmt="%(asctime)s - %(name)s:%(lineno)d - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+
+sh = logging.StreamHandler(sys.stdout)
+sh.setLevel(logging.DEBUG)
+sh.setFormatter(log_fmt)
+
+max_bytes = 4 * 1024 * 1024 # 4 MB
+rfh = logging.handlers.RotatingFileHandler("logs/snipebot.log", maxBytes=max_bytes, backupCount=10)
+rfh.setLevel(logging.DEBUG)
+rfh.setFormatter(log_fmt)
+
+if config.get("testing"):
+    HANDLER = sh
+else:
+    HANDLER = rfh
+
+root_logger = logging.getLogger()
+root_logger.setLevel(logging.INFO)
+root_logger.addHandler(HANDLER)
+
+_logger = logging.getLogger(__name__)
 
 
 class InferiorUtensil(commands.Bot):
@@ -46,9 +70,9 @@ class InferiorUtensil(commands.Bot):
             ext = ".".join(file.parts).removesuffix(".py")
             try:
                 await self.load_extension(ext)
-                log.info(f"Extension {ext} was loaded successfully!")
+                _logger.info(f"Extension {ext} was loaded successfully!")
             except Exception as err:
-                log.exception(f"Failed to load extension {ext}")
+                _logger.exception(f"Failed to load extension {ext}")
 
         os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
         os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"
