@@ -1,3 +1,4 @@
 {
-    "token": "token-here"
+    "token": "token-here",
+    "testing": false
 }
