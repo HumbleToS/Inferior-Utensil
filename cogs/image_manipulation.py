@@ -43,7 +43,8 @@ class ImageManipulation(commands.Cog):
 
         return buffered_image
 
-    @app_commands.command()
+    @app_commands.command(description="Slap a user!")
+    @app_commands.describe(target="User to slap")
     @app_commands.checks.dynamic_cooldown(owner_cooldown_bypass)
     async def slap(self, interaction: discord.Interaction, target: discord.User):
         sender_pfp_bytes = await self.get_pfp_in_bytes(interaction.user)
