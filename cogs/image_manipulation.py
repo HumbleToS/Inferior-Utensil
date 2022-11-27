@@ -7,6 +7,7 @@ from discord import app_commands
 from discord.ext import commands
 from PIL import Image
 
+from utils.dynamic_cooldown_check import owner_cooldown_bypass
 
 class ImageManipulation(commands.Cog):
     def __init__(self, bot):
@@ -43,6 +44,7 @@ class ImageManipulation(commands.Cog):
         return buffered_image
 
     @app_commands.command()
+    @app_commands.checks.dynamic_cooldown(owner_cooldown_bypass)
     async def slap(self, interaction: discord.Interaction, target: discord.User):
         sender_pfp_bytes = await self.get_pfp_in_bytes(interaction.user)
         target_pfp_bytes = await self.get_pfp_in_bytes(target)
