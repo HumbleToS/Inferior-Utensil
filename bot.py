@@ -1,14 +1,15 @@
-from discord.ext import commands
-from cachetools import TTLCache
-import discord
-import aiohttp
 import asyncio
+import json
 import logging
 import logging.handlers
-import json
 import os
-import sys
 import pathlib
+import sys
+
+import aiohttp
+import discord
+from cachetools import TTLCache
+from discord.ext import commands
 
 bot_description = "I am an Inferior Utensil <3"
 

@@ -1,6 +1,6 @@
 import functools
-import pathlib
 import io
+import pathlib
 
 import discord
 from discord import app_commands
