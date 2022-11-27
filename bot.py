@@ -1,4 +1,5 @@
 from discord.ext import commands
+from cachetools import TTLCache
 import discord
 import aiohttp
 import asyncio
@@ -61,6 +62,26 @@ class InferiorUtensil(commands.Bot):
             max_messages=5000,
         )
         self.config = config
+        self._cache = TTLCache(maxsize=5, ttl=7200)
+
+    async def fetch_team_members(self) -> list[discord.TeamMember]:
+        """Retrives the applications team members
+
+        Returns
+        -------
+        list[discord.TeamMember]
+            Returns a full list of the applications team members
+        """
+        key = "team_members"
+        cached = self._cache.get(key)
+        if cached is not None:
+            return cached
+
+        team_members = (await self.application_info()).team.members
+
+        self._cache[key] = team_members
+
+        return team_members
 
     async def setup_hook(self) -> None:
         self.session = aiohttp.ClientSession
@@ -75,9 +96,14 @@ class InferiorUtensil(commands.Bot):
             except Exception as err:
                 _logger.exception(f"Failed to load extension {ext}")
 
+        self.team_members = await self.fetch_team_members()
+
         os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
         os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"
         await self.load_extension("jishaku")
+
+    async def on_message_edit(self, before, after):
+        await self.process_commands(after)
 
     async def close(self) -> None:
         await super().close()
