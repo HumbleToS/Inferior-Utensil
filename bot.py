@@ -3,6 +3,7 @@ import discord
 import aiohttp
 import asyncio
 import logging
+import logging.handlers
 import json
 import os
 import sys
@@ -22,7 +23,7 @@ sh = logging.StreamHandler(sys.stdout)
 sh.setLevel(logging.DEBUG)
 sh.setFormatter(log_fmt)
 
-max_bytes = 4 * 1024 * 1024 # 4 MB
+max_bytes = 4 * 1024 * 1024  # 4 MB
 rfh = logging.handlers.RotatingFileHandler("logs/inferiorutensil.log", maxBytes=max_bytes, backupCount=10)
 rfh.setLevel(logging.DEBUG)
 rfh.setFormatter(log_fmt)
@@ -85,9 +86,11 @@ class InferiorUtensil(commands.Bot):
     async def start(self) -> None:
         await super().start(config.get("token"), reconnect=True)
 
+
 # Start and run the bot
 async def main():
     bot = InferiorUtensil()
     await bot.start()
+
 
 asyncio.run(main())
