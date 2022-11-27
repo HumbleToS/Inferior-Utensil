@@ -9,17 +9,44 @@ from PIL import Image
 
 from utils.dynamic_cooldown_check import owner_cooldown_bypass
 
+
 class ImageManipulation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.slap_image_path = pathlib.Path("./cogs/base_images/slap.png")
 
     async def get_pfp_in_bytes(self, user: discord.User) -> bytes:
+        """Get the users avatar in bytes
+
+        Parameters
+        ----------
+        user : discord.User
+            The user of which will have their avatar converted to bytes
+
+        Returns
+        -------
+        bytes
+            Returns the Bytes of the users avatar
+        """
         av_bytesIO = io.BytesIO(await user.display_avatar.read())
         av_bytesIO.seek(0)
         return av_bytesIO
 
     def generate_slap_image(self, sender: io.BytesIO, target: io.BytesIO) -> io.BytesIO:
+        """Generate the slap image with the sender and target avatars
+
+        Parameters
+        ----------
+        sender : io.BytesIO
+            The senders avatar in BytesIO
+        target : io.BytesIO
+            The targets avatar in BytesIO
+
+        Returns
+        -------
+        io.BytesIO
+            The slap image of the senders and targets avatar overlayed onto the base image
+        """
         template_image: Image = Image.open(self.slap_image_path)
         sender_pfp = Image.open(sender)
         target_pfp = Image.open(target)
