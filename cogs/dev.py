@@ -6,6 +6,7 @@ from discord.ext import commands
 
 _logger = logging.getLogger(__name__)
 
+
 class DevToolsCog(commands.Cog):
     def __init__(self, bot):
         self.bot: commands.Bot = bot
@@ -13,7 +14,12 @@ class DevToolsCog(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @commands.is_owner()
-    async def sync(self, ctx: commands.Context, guilds: commands.Greedy[discord.Object], spec: typing.Optional[typing.Literal["~", "*", "^"]] = None) -> None:
+    async def sync(
+        self,
+        ctx: commands.Context,
+        guilds: commands.Greedy[discord.Object],
+        spec: typing.Optional[typing.Literal["~", "*", "^"]] = None,
+    ) -> None:
         """Syncs command tree.
 
         Parameters
@@ -50,9 +56,11 @@ class DevToolsCog(commands.Cog):
                 ret += 1
         await ctx.send(f"Synced the tree to {ret}/{len(guilds)}.")
 
+
 async def setup(bot):
     _logger.info("Loading cog DevToolsCog")
     await bot.add_cog(DevToolsCog(bot))
+
 
 async def teardown(_):
     _logger.info("Unloading cog DevToolsCog")

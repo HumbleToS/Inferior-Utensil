@@ -26,6 +26,7 @@ from discord.ext import commands
 
 _logger = logging.getLogger(__name__)
 
+
 class PyTest(commands.Cog):
     def __init__(self, bot):
         self.bot: commands.Bot = bot
@@ -40,7 +41,7 @@ class PyTest(commands.Cog):
         code: str
             The code to run. Can be formatted without a codeblock, in a python codeblock, or in a bare codeblock.
         """
-        mystdout = StringIO() #will hold the output of the code run
+        mystdout = StringIO()  # will hold the output of the code run
 
         async with ctx.channel.typing():
             if code.startswith("```python") and code.endswith("```"):
@@ -56,10 +57,26 @@ class PyTest(commands.Cog):
                 ldict = {}
                 bot = self.bot
 
-                exec(f'async def __ex(): ' + ''.join(f'\n {l}' for l in code.split('\n')), {"discord": discord, "random": random, "commands": commands, "embeds": embeds, "utils": discord.utils, "math": math, 'ctx': ctx, 'bot': bot, 'asyncio': asyncio, 'aio': asyncio}, ldict)
-                return await ldict['__ex']() #await the created coro
+                exec(
+                    f'async def __ex(): ' + ''.join(f'\n {l}' for l in code.split('\n')),
+                    {
+                        "discord": discord,
+                        "random": random,
+                        "commands": commands,
+                        "embeds": embeds,
+                        "utils": discord.utils,
+                        "math": math,
+                        'ctx': ctx,
+                        'bot': bot,
+                        'asyncio': asyncio,
+                        'aio': asyncio,
+                    },
+                    ldict,
+                )
+                return await ldict['__ex']()  # await the created coro
+
             with contextlib.redirect_stdout(mystdout), contextlib.redirect_stderr(mystdout):
-                await asyncio.wait_for(aexec(code, ctx), timeout=600) #Should time it out after 600 seconds
+                await asyncio.wait_for(aexec(code, ctx), timeout=600)  # Should time it out after 600 seconds
             await ctx.message.add_reaction("\N{WHITE HEAVY CHECK MARK}")
 
         if mystdout.getvalue():
@@ -78,6 +95,7 @@ class PyTest(commands.Cog):
 async def setup(bot):
     _logger.info("Loading cog PyTest")
     await bot.add_cog(PyTest(bot))
+
 
 async def teardown(bot):
     _logger.info("Unloading cog PyTest")
