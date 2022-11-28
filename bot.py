@@ -48,7 +48,7 @@ _logger = logging.getLogger(__name__)
 
 
 class InferiorUtensil(commands.Bot):
-    def __init__(self):
+    def __init__(self) -> None:
         intents = discord.Intents(
             emojis=True,
             guilds=True,
@@ -108,7 +108,7 @@ class InferiorUtensil(commands.Bot):
         os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"
         await self.load_extension("jishaku")
 
-    async def on_message_edit(self, before, after):
+    async def on_message_edit(self, _: discord.Message, after: discord.Message) -> None:
         await self.process_commands(after)
 
     async def close(self) -> None:
@@ -120,7 +120,7 @@ class InferiorUtensil(commands.Bot):
 
 
 # Start and run the bot
-async def main():
+async def main() -> None:
     bot = InferiorUtensil()
     await bot.start()
 
