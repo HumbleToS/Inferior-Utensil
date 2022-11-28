@@ -17,5 +17,6 @@ class Main(commands.Cog):
             )
             await message.reply(embed=em)
 
+
 async def setup(bot: commands.Bot):
     await bot.add_cog(Main(bot))
