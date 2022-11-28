@@ -11,7 +11,7 @@ from utils.dynamic_cooldown_check import owner_cooldown_bypass
 
 
 class ImageManipulation(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self._slap_image_path = pathlib.Path("./cogs/base_images/slap.png")
 
@@ -87,5 +87,5 @@ class ImageManipulation(commands.Cog):
         await interaction.response.send_message(file=discord.File(image, "slap.png"))
 
 
-async def setup(bot) -> None:
+async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(ImageManipulation(bot))
