@@ -72,7 +72,7 @@ class ImageManipulation(commands.Cog):
 
     @app_commands.command()
     @app_commands.checks.dynamic_cooldown(owner_cooldown_bypass)
-    async def slap(self, interaction: discord.Interaction, target: discord.User):
+    async def slap(self, interaction: discord.Interaction, target: discord.User) -> None:
         """Slap someone!
 
         Parameters
@@ -87,5 +87,5 @@ class ImageManipulation(commands.Cog):
         await interaction.response.send_message(file=discord.File(image, "slap.png"))
 
 
-async def setup(bot):
+async def setup(bot) -> None:
     await bot.add_cog(ImageManipulation(bot))
