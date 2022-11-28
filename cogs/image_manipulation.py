@@ -13,9 +13,9 @@ from utils.dynamic_cooldown_check import owner_cooldown_bypass
 class ImageManipulation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.slap_image_path = pathlib.Path("./cogs/base_images/slap.png")
+        self._slap_image_path = pathlib.Path("./cogs/base_images/slap.png")
 
-    async def get_pfp_in_bytes(self, user: discord.User) -> bytes:
+    async def get_pfp_in_bytes(self, user: discord.User) -> io.BytesIO:
         """Get the users avatar in bytes
 
         Parameters
@@ -45,9 +45,9 @@ class ImageManipulation(commands.Cog):
         Returns
         -------
         io.BytesIO
-            The slap image of the senders and targets avatar overlayed onto the base image
+            A buffer containing a `png` with the sender and target overlayed.
         """
-        template_image: Image = Image.open(self.slap_image_path)
+        template_image: Image = Image.open(self._slap_image_path)
         sender_pfp = Image.open(sender)
         target_pfp = Image.open(target)
 
@@ -70,10 +70,16 @@ class ImageManipulation(commands.Cog):
 
         return buffered_image
 
-    @app_commands.command(description="Slap a user!")
-    @app_commands.describe(target="User to slap")
+    @app_commands.command()
     @app_commands.checks.dynamic_cooldown(owner_cooldown_bypass)
     async def slap(self, interaction: discord.Interaction, target: discord.User):
+        """Slap someone!
+
+        Parameters
+        ----------
+        target : discord.User
+            Who do you want to slap?
+        """
         sender_pfp_bytes = await self.get_pfp_in_bytes(interaction.user)
         target_pfp_bytes = await self.get_pfp_in_bytes(target)
         to_run = functools.partial(self.generate_slap_image, sender_pfp_bytes, target_pfp_bytes)
