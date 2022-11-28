@@ -13,8 +13,13 @@ from discord.ext import commands
 
 bot_description = "I am an Inferior Utensil <3"
 
-config_path = os.path.dirname(os.path.abspath(__file__))
-config = json.load(open(f"{config_path}/config.json"))
+cwd = pathlib.Path(__file__).parent
+CONFIG_FILE_NAME = "config.json"
+config_path = cwd / CONFIG_FILE_NAME
+
+with open(config_path) as fp:
+    config = json.load(fp)
+
 
 log_fmt = logging.Formatter(
     fmt="%(asctime)s - %(name)s:%(lineno)d - %(levelname)s - %(message)s",
