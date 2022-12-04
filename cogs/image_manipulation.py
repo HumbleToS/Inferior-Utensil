@@ -5,7 +5,7 @@ import pathlib
 import discord
 from discord import app_commands
 from discord.ext import commands
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 from utils.dynamic_cooldown_check import owner_cooldown_bypass
 
@@ -14,6 +14,7 @@ class ImageManipulation(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self._slap_image_path = pathlib.Path("./cogs/base_images/slap.png")
+        self._do_stuff_image_path = pathlib.Path("./cogs/base_images/do_stuff.png")
 
     async def get_pfp_in_bytes(self, user: discord.User) -> io.BytesIO:
         """Get the users avatar in bytes
@@ -70,6 +71,39 @@ class ImageManipulation(commands.Cog):
 
         return buffered_image
 
+    def generate_do_something_image(self, avatar: io.BytesIO):
+        """Generate the do stuff image with the users avata
+
+        Parameters
+        ----------
+        avatar : io.BytesIO
+            The senders avatar
+
+        Returns
+        -------
+        io.BytesIO
+            A buffer containing a `png` with the avatar overlayed.
+        """
+        template_image: Image = Image.open(self._do_stuff_image_path)
+
+        draw = ImageDraw.Draw(template_image)
+        font = ImageFont.truetype("./cogs/fonts/OpenSans-Regular.ttf", 54)
+        draw.text((140, 40), "C'mon,\ndo stuff...", 'black', font=font, align='center', stroke_width=2)
+
+        user_avatar = Image.open(avatar)
+
+        if user_avatar.mode != "RGB" or user_avatar.mode != "RGBA":
+            user_avatar = user_avatar.convert("RGBA")
+
+        user_avatar.thumbnail((240, 210))
+        template_image.paste(user_avatar, (220, 369))
+
+        buffered_image = io.BytesIO()
+        template_image.save(buffered_image, "PNG")
+        buffered_image.seek(0)
+
+        return buffered_image
+
     @app_commands.command()
     @app_commands.checks.dynamic_cooldown(owner_cooldown_bypass)
     async def slap(self, interaction: discord.Interaction, target: discord.User) -> None:
@@ -85,6 +119,22 @@ class ImageManipulation(commands.Cog):
         to_run = functools.partial(self.generate_slap_image, sender_pfp_bytes, target_pfp_bytes)
         image: io.BytesIO = await self.bot.loop.run_in_executor(None, to_run)
         await interaction.response.send_message(file=discord.File(image, "slap.png"))
+
+    @app_commands.command()
+    @app_commands.checks.dynamic_cooldown(owner_cooldown_bypass)
+    async def do_stuff(self, interaction: discord.Interaction, target: discord.User) -> None:
+        """C'mon, do stuff...
+
+        Parameters
+        ----------
+        target : discord.User
+            Who do you want to do stuff?
+        """
+        await interaction.response.defer()
+        avatar_bytes = await self.get_pfp_in_bytes(target or interaction.user)
+        to_run = functools.partial(self.generate_do_something_image, avatar_bytes)
+        image: io.BytesIO = await self.bot.loop.run_in_executor(None, to_run)
+        await interaction.followup.send(file=discord.File(image, "do_stuff.png"))
 
 
 async def setup(bot: commands.Bot) -> None:
