@@ -61,7 +61,7 @@ class InferiorUtensil(commands.Bot):
             voice_states=True,
         )
         super().__init__(
-            command_prefix="?",
+            command_prefix=commands.when_mentioned_or("?"),
             description=bot_description,
             intents=intents,
             case_insensitive=True,
