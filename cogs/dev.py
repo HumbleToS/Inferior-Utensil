@@ -58,7 +58,7 @@ class DevTools(commands.Cog):
 
 
 async def setup(bot):
-    _logger.info("Loading DevToolsCog cog")
+    _logger.info("Loading DevTools cog")
     await bot.add_cog(DevTools(bot))
 
 
