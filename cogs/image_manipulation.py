@@ -1,5 +1,6 @@
 import functools
 import io
+import logging
 import pathlib
 
 import discord
@@ -8,6 +9,8 @@ from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont
 
 from utils.dynamic_cooldown_check import owner_cooldown_bypass
+
+_logger = logging.getLogger(__name__)
 
 
 class ImageManipulation(commands.Cog):
@@ -139,3 +142,7 @@ class ImageManipulation(commands.Cog):
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(ImageManipulation(bot))
+
+
+async def teardown(_):
+    _logger.info("Extension: Unloading ImageManipulation")
