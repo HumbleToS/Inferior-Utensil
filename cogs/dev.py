@@ -8,8 +8,8 @@ _logger = logging.getLogger(__name__)
 
 
 class DevToolsCog(commands.Cog):
-    def __init__(self, bot):
-        self.bot: commands.Bot = bot
+    def __init__(self, bot: commands.Bot) -> None:
+        self.bot = bot
 
     @commands.command()
     @commands.guild_only()
