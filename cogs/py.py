@@ -253,4 +253,4 @@ async def setup(bot):
 
 
 async def teardown(_):
-    _logger.info("Unloading cog PyTest")
+    _logger.info("Extension: Unloading PyTest")

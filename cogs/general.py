@@ -1,7 +1,10 @@
+import logging
 import re
 
 import discord
 from discord.ext import commands
+
+_logger = logging.getLogger(__name__)
 
 
 class Main(commands.Cog):
@@ -20,3 +23,7 @@ class Main(commands.Cog):
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Main(bot))
+
+
+async def teardown(_):
+    _logger.info("Extension: Unloading DevTools")
