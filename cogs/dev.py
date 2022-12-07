@@ -7,7 +7,7 @@ from discord.ext import commands
 _logger = logging.getLogger(__name__)
 
 
-class DevToolsCog(commands.Cog):
+class DevTools(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
@@ -59,8 +59,8 @@ class DevToolsCog(commands.Cog):
 
 async def setup(bot):
     _logger.info("Loading DevToolsCog cog")
-    await bot.add_cog(DevToolsCog(bot))
+    await bot.add_cog(DevTools(bot))
 
 
 async def teardown(_):
-    _logger.info("Unloading DevToolsCog cog")
+    _logger.info("Extension: Unloading DevTools")
