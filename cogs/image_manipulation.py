@@ -133,11 +133,10 @@ class ImageManipulation(commands.Cog):
         target : discord.User
             Who do you want to do stuff?
         """
-        await interaction.response.defer()
         avatar_bytes = await self.get_pfp_in_bytes(target or interaction.user)
         to_run = functools.partial(self.generate_do_something_image, avatar_bytes)
         image: io.BytesIO = await self.bot.loop.run_in_executor(None, to_run)
-        await interaction.followup.send(file=discord.File(image, "do_stuff.png"))
+        await interaction.response.send_message(file=discord.File(image, "do_stuff.png"))
 
 
 async def setup(bot: commands.Bot) -> None:
