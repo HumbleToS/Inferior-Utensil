@@ -20,7 +20,6 @@ config_path = cwd / CONFIG_FILE_NAME
 with open(config_path) as fp:
     config = json.load(fp)
 
-
 log_fmt = logging.Formatter(
     fmt="%(asctime)s - %(name)s:%(lineno)d - %(levelname)s - %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
