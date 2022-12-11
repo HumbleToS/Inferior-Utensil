@@ -7,9 +7,10 @@ import pathlib
 import sys
 
 import aiohttp
-import discord
 from cachetools import TTLCache
+import discord
 from discord.ext import commands
+from tortoise import Tortoise
 
 bot_description = "I am an Inferior Utensil <3"
 
@@ -19,6 +20,11 @@ config_path = cwd / CONFIG_FILE_NAME
 
 with open(config_path) as fp:
     config = json.load(fp)
+
+db_url = config["db_url"]
+
+if config["testing"]:
+    db_url = "sqlite://:memory:"
 
 log_fmt = logging.Formatter(
     fmt="%(asctime)s - %(name)s:%(lineno)d - %(levelname)s - %(message)s",
@@ -121,6 +127,12 @@ class InferiorUtensil(commands.Bot):
 # Start and run the bot
 async def main() -> None:
     bot = InferiorUtensil()
+
+    await Tortoise.init(db_url=db_url, modules={"models": ["lib.dbmodels"]})
+
+    if config["gen_schema"]:
+        await Tortoise.generate_schemas(safe=True)
+
     await bot.start()
 
 
