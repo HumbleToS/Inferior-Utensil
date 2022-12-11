@@ -1,4 +1,6 @@
 {
-    "token": "token-here",
-    "testing": false
+    "token": "TOKEN HERE",
+    "testing": false,
+    "db_url": "sqlite://inferior-utensil.sqlite",
+    "gen_schema": true
 }
