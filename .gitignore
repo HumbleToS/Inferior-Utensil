@@ -9,6 +9,12 @@ config.json
 # Logging directory
 logs/
 
+# All sqlite files.
+*.sqlite*
+
+# Vscode dir
+.vscode
+
 # pyenv
 .python-version
 
