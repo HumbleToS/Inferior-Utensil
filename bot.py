@@ -5,10 +5,11 @@ import logging.handlers
 import os
 import pathlib
 import sys
+from typing import Union
 
 import aiohttp
-from cachetools import TTLCache
 import discord
+from cachetools import TTLCache
 from discord.ext import commands
 from tortoise import Tortoise
 
@@ -67,6 +68,7 @@ class InferiorUtensil(commands.Bot):
         )
         super().__init__(
             command_prefix=commands.when_mentioned_or("?"),
+            activity=discord.Activity(type=discord.ActivityType.watching, name="my good code | ?help"),
             description=bot_description,
             intents=intents,
             case_insensitive=True,
@@ -75,20 +77,24 @@ class InferiorUtensil(commands.Bot):
         self.config = config
         self._cache = TTLCache(maxsize=5, ttl=7200)
 
-    async def fetch_team_members(self) -> list[discord.TeamMember]:
+    async def fetch_team_members(self) -> Union[list[discord.TeamMember], None]:
         """Retrives the applications team members
 
         Returns
         -------
-        list[discord.TeamMember]
-            Returns a full list of the applications team members
+        Union[list[discord.TeamMember], None]
+            Returns a full list of the applications team members if there is a team
         """
         key = "team_members"
         cached = self._cache.get(key)
         if cached is not None:
             return cached
 
-        team_members = (await self.application_info()).team.members
+        app_info = await self.application_info()
+        if app_info.team:
+            team_members = app_info.team.members
+        else:
+            team_members = None
 
         self._cache[key] = team_members
 
