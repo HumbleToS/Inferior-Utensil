@@ -196,7 +196,7 @@ class PyTest(commands.Cog):
         async with ctx.channel.typing():
             if code.startswith("```python") and code.endswith("```"):
                 code = code[10:-3]
-            elif code.startswith("```py") and code.endswith("````"):
+            elif code.startswith("```py") and code.endswith("```"):
                 code = code[5:-3]
             elif code.startswith("```") and code.endswith("```"):
                 code = code[3:-3]
