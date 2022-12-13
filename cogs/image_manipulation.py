@@ -30,8 +30,8 @@ class ImageManipulation(commands.Cog):
 
         Returns
         -------
-        bytes
-            Returns the Bytes of the users avatar
+        io.BytesIO
+            A buffer containing the bytes of a User/Member's avatar
         """
         av_bytesIO = io.BytesIO(await user.display_avatar.read())
         av_bytesIO.seek(0)
@@ -75,7 +75,7 @@ class ImageManipulation(commands.Cog):
 
         return buffered_image
 
-    def generate_do_something_image(self, avatar: io.BytesIO):
+    def generate_do_something_image(self, avatar: io.BytesIO) -> io.BytesIO:
         """Generate the do stuff image with the users avata
 
         Parameters
