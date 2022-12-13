@@ -19,7 +19,7 @@ class ImageManipulation(commands.Cog):
         self._slap_image_path = pathlib.Path("./cogs/base_images/slap.png")
         self._do_stuff_image_path = pathlib.Path("./cogs/base_images/do_stuff.png")
 
-    async def get_pfp_in_bytes(self, user: discord.User) -> io.BytesIO:
+    async def get_pfp_in_bytes(self, user: discord.User | discord.Member) -> io.BytesIO:
         """Get the users avatar in bytes
 
         Parameters
@@ -51,7 +51,7 @@ class ImageManipulation(commands.Cog):
         io.BytesIO
             A buffer containing a `png` with the sender and target overlayed.
         """
-        template_image: Image = Image.open(self._slap_image_path)
+        template_image = Image.open(self._slap_image_path)
         sender_pfp = Image.open(sender)
         target_pfp = Image.open(target)
 
@@ -87,7 +87,7 @@ class ImageManipulation(commands.Cog):
         io.BytesIO
             A buffer containing a `png` with the avatar overlayed.
         """
-        template_image: Image = Image.open(self._do_stuff_image_path)
+        template_image = Image.open(self._do_stuff_image_path)
 
         draw = ImageDraw.Draw(template_image)
         font = ImageFont.truetype("./cogs/fonts/OpenSans-Regular.ttf", 54)
