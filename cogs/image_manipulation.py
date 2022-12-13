@@ -2,6 +2,7 @@ import functools
 import io
 import logging
 import pathlib
+from typing import Union
 
 import discord
 from discord import app_commands
@@ -19,7 +20,7 @@ class ImageManipulation(commands.Cog):
         self._slap_image_path = pathlib.Path("./cogs/base_images/slap.png")
         self._do_stuff_image_path = pathlib.Path("./cogs/base_images/do_stuff.png")
 
-    async def get_pfp_in_bytes(self, user: discord.User | discord.Member) -> io.BytesIO:
+    async def get_pfp_in_bytes(self, user: Union[discord.User, discord.Member]) -> io.BytesIO:
         """Get the users avatar in bytes
 
         Parameters
