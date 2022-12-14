@@ -101,7 +101,7 @@ class InferiorUtensil(commands.Bot):
         return team_members
 
     async def setup_hook(self) -> None:
-        self.session = aiohttp.ClientSession
+        self.session = aiohttp.ClientSession()
         for file in sorted(pathlib.Path("cogs").glob("**/[!_]*.py")):
             """
             Don't get (or load) any cogs starting with an underscore (AbstractUmbra's code momento <3)
