@@ -41,10 +41,7 @@ rfh = logging.handlers.RotatingFileHandler("logs/inferior-utensil.log", maxBytes
 rfh.setLevel(logging.DEBUG)
 rfh.setFormatter(log_fmt)
 
-if config.get("testing"):
-    HANDLER = sh
-else:
-    HANDLER = rfh
+HANDLER = sh if config.get("testing") else rfh
 
 root_logger = logging.getLogger()
 root_logger.setLevel(logging.INFO)
