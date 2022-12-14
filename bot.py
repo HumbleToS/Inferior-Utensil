@@ -126,11 +126,7 @@ class InferiorUtensil(commands.Bot):
         await super().close()
         await self.session.close()
 
-    async def start(self) -> None:
-        await super().start(config.get("token"), reconnect=True)
 
-
-# Start and run the bot
 async def main() -> None:
     bot = InferiorUtensil()
 
@@ -139,7 +135,7 @@ async def main() -> None:
     if config["gen_schema"]:
         await Tortoise.generate_schemas(safe=True)
 
-    await bot.start()
+    await bot.start(config.get("token"), reconnect=True)
 
 
 asyncio.run(main())
