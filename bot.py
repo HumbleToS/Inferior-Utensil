@@ -65,7 +65,7 @@ class InferiorUtensil(commands.Bot):
         )
         super().__init__(
             command_prefix=commands.when_mentioned_or("inf "),
-            activity=discord.Activity(type=discord.ActivityType.watching, name="my good code | ?help"),
+            activity=discord.Activity(type=discord.ActivityType.watching, name="my good code | inf help"),
             description=bot_description,
             intents=intents,
             case_insensitive=True,
