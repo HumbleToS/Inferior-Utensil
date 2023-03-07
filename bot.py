@@ -27,25 +27,28 @@ db_url = config["db_url"]
 if config["testing"]:
     db_url = "sqlite://:memory:"
 
-log_fmt = logging.Formatter(
-    fmt="%(asctime)s - %(name)s:%(lineno)d - %(levelname)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
 
-sh = logging.StreamHandler(sys.stdout)
-sh.setLevel(logging.DEBUG)
-sh.setFormatter(log_fmt)
+def setup_logging():
+    log_fmt = logging.Formatter(
+        fmt="%(asctime)s - %(name)s:%(lineno)d - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
 
-max_bytes = 4 * 1024 * 1024  # 4 MB
-rfh = logging.handlers.RotatingFileHandler("logs/inferior-utensil.log", maxBytes=max_bytes, backupCount=10)
-rfh.setLevel(logging.DEBUG)
-rfh.setFormatter(log_fmt)
+    sh = logging.StreamHandler(sys.stdout)
+    sh.setLevel(logging.DEBUG)
+    sh.setFormatter(log_fmt)
 
-HANDLER = sh if config.get("testing") else rfh
+    max_bytes = 4 * 1024 * 1024  # 4 MB
+    rfh = logging.handlers.RotatingFileHandler("logs/inferior-utensil.log", maxBytes=max_bytes, backupCount=10)
+    rfh.setLevel(logging.DEBUG)
+    rfh.setFormatter(log_fmt)
 
-root_logger = logging.getLogger()
-root_logger.setLevel(logging.INFO)
-root_logger.addHandler(HANDLER)
+    HANDLER = sh if config.get("testing") else rfh
+
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+    root_logger.addHandler(HANDLER)
+
 
 _logger = logging.getLogger(__name__)
 
@@ -120,11 +123,12 @@ class InferiorUtensil(commands.Bot):
         await self.process_commands(after)
 
     async def close(self) -> None:
-        await super().close()
         await self.session.close()
+        await super().close()
 
 
 async def main() -> None:
+    setup_logging()
     bot = InferiorUtensil()
 
     await Tortoise.init(db_url=db_url, modules={"models": ["lib.dbmodels"]})
